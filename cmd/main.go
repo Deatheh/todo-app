@@ -4,11 +4,17 @@ import (
 	"log"
 
 	"github.com/Deatheh/todo-app"
+	"github.com/Deatheh/todo-app/pkg/handler"
+	"github.com/Deatheh/todo-app/pkg/repository"
+	"github.com/Deatheh/todo-app/pkg/service"
 )
 
 func main() {
+	repos := repository.NewRepository()
+	services := service.NewService(repos)
+	handlers := handler.NewHandler(services)
 	srv := new(todo.Server)
-	if err := srv.Run("8000"); err != nil {
+	if err := srv.Run("8000", handlers.InitRoutes()); err != nil {
 		log.Fatalf("&s", err.Error())
 	}
 
